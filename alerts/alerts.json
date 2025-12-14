@@ -1,0 +1,121 @@
+[
+  {
+    "rule": "SSH Brute Force",
+    "type": "SSH_BRUTE_FORCE",
+    "severity": "medium",
+    "source_ip": "192.168.1.50",
+    "failed_attempts": 3,
+    "first_seen": "Jan 12 10:15:32",
+    "last_seen": "Jan 12 10:15:38",
+    "context": {
+      "service": "ssh",
+      "action": "login"
+    },
+    "evidence": [
+      {
+        "timestamp": "Jan 12 10:15:32",
+        "host": "server",
+        "service": "ssh",
+        "action": "login",
+        "status": "failed",
+        "user": "admin",
+        "source_ip": "192.168.1.50"
+      },
+      {
+        "timestamp": "Jan 12 10:15:35",
+        "host": "server",
+        "service": "ssh",
+        "action": "login",
+        "status": "failed",
+        "user": "admin",
+        "source_ip": "192.168.1.50"
+      },
+      {
+        "timestamp": "Jan 12 10:15:38",
+        "host": "server",
+        "service": "ssh",
+        "action": "login",
+        "status": "failed",
+        "user": "admin",
+        "source_ip": "192.168.1.50"
+      }
+    ],
+    "rule_id": "SIEM-SSH-001",
+    "tags": [
+      "ssh",
+      "bruteforce",
+      "authentication",
+      "blue-team"
+    ],
+    "recommended_actions": [
+      "Check if the source IP is internal or external.",
+      "Review the evidence events for targeted usernames.",
+      "Block or rate-limit the source IP if confirmed malicious.",
+      "Verify whether the successful login was expected (MFA? known admin activity?)."
+    ]
+  },
+  {
+    "rule": "SSH Success After Brute Force",
+    "type": "SSH_SUCCESS_AFTER_BRUTEFORCE",
+    "severity": "high",
+    "source_ip": "192.168.1.50",
+    "user": "root",
+    "timestamp": "Jan 12 10:16:10",
+    "context": {
+      "service": "ssh",
+      "action": "login",
+      "reason": "Successful login after >= 3 failed attempts from same IP"
+    },
+    "evidence": [
+      {
+        "timestamp": "Jan 12 10:15:32",
+        "host": "server",
+        "service": "ssh",
+        "action": "login",
+        "status": "failed",
+        "user": "admin",
+        "source_ip": "192.168.1.50"
+      },
+      {
+        "timestamp": "Jan 12 10:15:35",
+        "host": "server",
+        "service": "ssh",
+        "action": "login",
+        "status": "failed",
+        "user": "admin",
+        "source_ip": "192.168.1.50"
+      },
+      {
+        "timestamp": "Jan 12 10:15:38",
+        "host": "server",
+        "service": "ssh",
+        "action": "login",
+        "status": "failed",
+        "user": "admin",
+        "source_ip": "192.168.1.50"
+      },
+      {
+        "timestamp": "Jan 12 10:16:10",
+        "host": "server",
+        "service": "ssh",
+        "action": "login",
+        "status": "success",
+        "user": "root",
+        "source_ip": "192.168.1.50"
+      }
+    ],
+    "rule_id": "SIEM-SSH-002",
+    "tags": [
+      "ssh",
+      "bruteforce",
+      "possible-compromise",
+      "authentication"
+    ],
+    "recommended_actions": [
+      "Treat as potential compromise: validate the successful login immediately.",
+      "Check the account used for suspicious activity after login (commands, processes, new users).",
+      "Hunt for the same source IP across other systems/log sources.",
+      "Consider isolating the host if suspicious activity is confirmed."
+    ]
+  }
+]
