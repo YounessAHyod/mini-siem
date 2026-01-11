@@ -29,6 +29,8 @@ def test_detector_flags_bruteforce_on_repeated_fails():
     alerts = detect_ssh_bruteforce(normalized)
 
     assert alerts, "Expected at least one brute-force alert"
+
+
 def test_detector_does_not_trigger_when_events_are_outside_time_window():
     base = datetime(2026, 1, 1, 0, 0, 0)
 
